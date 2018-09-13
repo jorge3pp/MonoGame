@@ -12,9 +12,26 @@ namespace _1W
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        //Camera
+        Matrix view;
+        Matrix projection;
+
+        //Color Vertices
+        VertexPositionColor[] colorVertices;
+
+        //Effect (World)
+        BasicEffect effect;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferHeight = 720;
+            graphics.ApplyChanges();
+
+            IsMouseVisible = true;
+            TargetElapsedTime = new System.TimeSpan(0, 0, 0, 0,16);
+
             Content.RootDirectory = "Content";
         }
 
@@ -27,6 +44,8 @@ namespace _1W
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            view = Matrix.CreateLookAt(new Vector3(0, 0, 5), new Vector3(0, 0, -1), Vector3.Up);
+            projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), GraphicsDevice.DisplayMode.AspectRatio, 0.1f, 1000.0f);
 
             base.Initialize();
         }
@@ -37,10 +56,39 @@ namespace _1W
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
+            /*// Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            */
+            setUpColorVertices();
+        }
+
+        void setUpColorVertices()
+        {
+            colorVertices = new VertexPositionColor[6];
+
+            //BL- BOTTOM LEFT
+            colorVertices[0] = new VertexPositionColor(new Vector3(-1, -1, 0), Color.Red);
+
+            //TL- TOP LEFT
+            colorVertices[1] = new VertexPositionColor(new Vector3(-1, 1, 0), Color.Green);
+
+            //BR- BOTTOM RIGHT
+            colorVertices[2] = new VertexPositionColor(new Vector3(1, -1, 0), Color.Blue);
+
+
+            colorVertices[3] = new VertexPositionColor(new Vector3(1, 1, 0), Color.Black);
+
+
+            colorVertices[4] = new VertexPositionColor(new Vector3(-1, 1, 0), Color.Yellow);
+
+
+            colorVertices[5] = new VertexPositionColor(new Vector3(1, -1, 0), Color.Purple);
+
+            effect = new BasicEffect(GraphicsDevice);
+            effect.VertexColorEnabled = true;
+            effect.TextureEnabled = false;
         }
 
         /// <summary>
@@ -76,6 +124,19 @@ namespace _1W
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            effect.View = view;
+            effect.Projection = projection;
+            effect.World *= Matrix.CreateRotationY(MathHelper.ToRadians(0.5f));
+
+            //RasterizerState state = new RasterizerState();
+            //GraphicsDevice.RasterizerState = state;
+
+
+            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, colorVertices, 0, colorVertices.Length / 3);
+            }
 
             base.Draw(gameTime);
         }
