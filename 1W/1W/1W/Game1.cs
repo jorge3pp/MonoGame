@@ -30,7 +30,7 @@ namespace _1W
             graphics.ApplyChanges();
 
             IsMouseVisible = true;
-            TargetElapsedTime = new System.TimeSpan(0, 0, 0, 0,16);
+            TargetElapsedTime = new System.TimeSpan(0, 0, 0, 0, 16);
 
             Content.RootDirectory = "Content";
         }
@@ -44,8 +44,11 @@ namespace _1W
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+
+            //El primer vector acerca o nos aleja del objeto. El segundo no estoy muy seguro aun.
             view = Matrix.CreateLookAt(new Vector3(0, 0, 5), new Vector3(0, 0, -1), Vector3.Up);
-            projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), GraphicsDevice.DisplayMode.AspectRatio, 0.1f, 1000.0f);
+            //El primer valor aleja o acerca el objeto.
+            projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(30), GraphicsDevice.DisplayMode.AspectRatio, 0.1f, 1000.0f);
 
             base.Initialize();
         }
@@ -66,7 +69,7 @@ namespace _1W
 
         void setUpColorVertices()
         {
-            colorVertices = new VertexPositionColor[6];
+            colorVertices = new VertexPositionColor[8];
 
             //BL- BOTTOM LEFT
             colorVertices[0] = new VertexPositionColor(new Vector3(-1, -1, 0), Color.Red);
@@ -77,14 +80,20 @@ namespace _1W
             //BR- BOTTOM RIGHT
             colorVertices[2] = new VertexPositionColor(new Vector3(1, -1, 0), Color.Blue);
 
+            //TR- TOP RIGHT
+            colorVertices[7] = new VertexPositionColor(new Vector3(1, 1, 0), Color.Orange);
 
-            colorVertices[3] = new VertexPositionColor(new Vector3(1, 1, 0), Color.Black);
+            //CENTER
+            colorVertices[3] = new VertexPositionColor(new Vector3(0, 0, 0), Color.Pink);
 
 
-            colorVertices[4] = new VertexPositionColor(new Vector3(-1, 1, 0), Color.Yellow);
+            colorVertices[4] = new VertexPositionColor(new Vector3(1, 1, 0), Color.Black);
 
 
-            colorVertices[5] = new VertexPositionColor(new Vector3(1, -1, 0), Color.Purple);
+            colorVertices[5] = new VertexPositionColor(new Vector3(-1, 1, 0), Color.Yellow);
+
+
+            colorVertices[6] = new VertexPositionColor(new Vector3(1, -1, 0), Color.Purple);
 
             effect = new BasicEffect(GraphicsDevice);
             effect.VertexColorEnabled = true;
@@ -126,7 +135,9 @@ namespace _1W
             // TODO: Add your drawing code here
             effect.View = view;
             effect.Projection = projection;
-            effect.World *= Matrix.CreateRotationY(MathHelper.ToRadians(0.5f));
+            
+            //Si aumentamos el valor, aumenta la velocidad a la que rota el objeto.
+            effect.World *= Matrix.CreateRotationY(MathHelper.ToRadians(1f));
 
             //RasterizerState state = new RasterizerState();
             //GraphicsDevice.RasterizerState = state;
