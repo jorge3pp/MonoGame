@@ -78,22 +78,22 @@ namespace _1W
             textureVertices = new VertexPositionTexture[6];
 
             //BL- BOTTOM LEFT
-            textureVertices[0] = new VertexPositionTexture(new Vector3(-1, -1, 0), new Vector2(0,1));
+            textureVertices[0] = new VertexPositionTexture(new Vector3(-1, -1, 0), new Vector2(0, 1));
 
             //TL- TOP LEFT
-            textureVertices[1] = new VertexPositionTexture(new Vector3(-1, 1, 0), new Vector2(0, 1));
+            textureVertices[1] = new VertexPositionTexture(new Vector3(-1, 1, 0), new Vector2(0, 0));
 
             //BR- BOTTOM RIGHT
-            textureVertices[2] = new VertexPositionTexture(new Vector3(1, -1, 0), new Vector2(0, 1));
+            textureVertices[2] = new VertexPositionTexture(new Vector3(1, -1, 0), new Vector2(1, 1));
 
+            //TR
+            textureVertices[3] = new VertexPositionTexture(new Vector3(1, 1, 0), new Vector2(1, 0));
+            
+            //BR
+            textureVertices[4] = new VertexPositionTexture(new Vector3(1, -1, 0), new Vector2(1, 1));
 
-            textureVertices[3] = new VertexPositionTexture(new Vector3(1, 1, 0), new Vector2(0, 1));
-
-
-            textureVertices[4] = new VertexPositionTexture(new Vector3(-1, 1, 0), new Vector2(0, 1));
-
-
-            textureVertices[5] = new VertexPositionTexture(new Vector3(1, -1, 0), new Vector2(0, 1));
+            //TL
+            textureVertices[5] = new VertexPositionTexture(new Vector3(-1, 1, 0), new Vector2(0, 0));
 
             effect = new BasicEffect(GraphicsDevice);
             effect.TextureEnabled = true;

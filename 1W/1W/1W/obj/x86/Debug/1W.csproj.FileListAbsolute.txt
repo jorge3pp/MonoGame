@@ -23,3 +23,4 @@ C:\Users\S00184395\Documents\GitHub\MonoGame\1W\1W\1W\obj\x86\Debug\1W.csproj.Co
 C:\Users\S00184395\Documents\GitHub\MonoGame\1W\1W\1W\obj\x86\Debug\1W.exe
 C:\Users\S00184395\Documents\GitHub\MonoGame\1W\1W\1W\obj\x86\Debug\1W.pdb
 C:\Users\S00184395\Documents\GitHub\MonoGame\1W\1W\1W\obj\x86\Debug\1W.csprojAssemblyReference.cache
+C:\Users\S00184395\Documents\GitHub\MonoGame\1W\1W\1W\bin\Windows\x86\Debug\Content\uv_texture.xnb
