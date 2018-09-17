@@ -23,6 +23,9 @@ namespace _1W
         VertexPositionTexture[] textureVertices;
         Texture2D uvTexture;
 
+        //Normal Vertices
+        VertexPositionNormalTexture[] normalVertices;
+
         //Effect (World)
         BasicEffect effect;
 
@@ -70,7 +73,42 @@ namespace _1W
             // TODO: use this.Content to load your game content here
             */
             //setUpColorVertices();
-            setUpTexturedVertices();
+            //setUpTexturedVertices();
+            setUpNormalVertices();
+        }
+
+        void setUpNormalVertices()
+        {
+            normalVertices = new VertexPositionNormalTexture[6];
+
+            //BL- BOTTOM LEFT
+            normalVertices[0] = new VertexPositionNormalTexture(new Vector3(-1,-1,0), Vector3.Forward, new Vector2(0, 1));
+            //TL- TOP LEFT
+            normalVertices[1] = new VertexPositionNormalTexture(new Vector3(-1, 1, 0), Vector3.Forward, new Vector2(0, 0));
+            //BR- BOTTOM RIGHT
+            normalVertices[2] = new VertexPositionNormalTexture(new Vector3(1, -1, 0), Vector3.Forward, new Vector2(1, 1));
+
+            //TR
+            normalVertices[3] = new VertexPositionNormalTexture(new Vector3(1, 1, 0), Vector3.Forward, new Vector2(1, 0));
+            //BR
+            normalVertices[4] = new VertexPositionNormalTexture(new Vector3(1, -1, 0), Vector3.Forward, new Vector2(1, 1));
+            //TL
+            normalVertices[5] = new VertexPositionNormalTexture(new Vector3(-1, 1, 0), Vector3.Forward, new Vector2(0, 0));
+
+            effect = new BasicEffect(GraphicsDevice);
+            effect.TextureEnabled = true;
+            effect.Texture = Content.Load<Texture2D>("uv_texture");
+            effect.EnableDefaultLighting();
+            effect.PreferPerPixelLighting = true;
+
+            effect.DirectionalLight0.Enabled = true;
+            effect.DirectionalLight1.Enabled = true;
+            effect.DirectionalLight2.Enabled = false;
+
+            effect.DirectionalLight0.Direction = Vector3.Backward;
+            //effect.DirectionalLight0.DiffuseColor = Color.Blue.ToVector3();
+            effect.DirectionalLight1.Direction = Vector3.Left;
+            effect.DirectionalLight1.DiffuseColor = Color.Green.ToVector3();
         }
 
         void setUpTexturedVertices()
@@ -94,7 +132,6 @@ namespace _1W
             effect = new BasicEffect(GraphicsDevice);
             effect.TextureEnabled = true;
             effect.Texture = Content.Load<Texture2D>("uv_texture");
-            //effect.EnableDefaultLighting();
         }
 
         void setUpColorVertices()
@@ -133,6 +170,7 @@ namespace _1W
             // TODO: Unload any non ContentManager content here
         }
 
+
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -145,8 +183,19 @@ namespace _1W
 
             // TODO: Add your update logic here
 
+            world *= Matrix.CreateRotationZ(MathHelper.ToRadians(1f));
+            //world *= Matrix.CreateRotationY(MathHelper.ToRadians(1f));
+            //world *= Matrix.CreateRotationX(MathHelper.ToRadians(1f));
+
             base.Update(gameTime);
         }
+
+        //ISRT - Identity, Scaled, Rotation, Translation
+        Matrix world = 
+            Matrix.Identity *
+            Matrix.CreateScale(2) *
+            Matrix.CreateRotationX(MathHelper.ToRadians(45)) *
+            Matrix.CreateTranslation(new Vector3(0, 0, -10));
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -155,21 +204,24 @@ namespace _1W
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here
+            
             effect.View = view;
             effect.Projection = projection;
+            effect.World = world;
 
-
+            /*
             //Si aumentamos el valor, aumenta la velocidad a la que rota el objeto.
             effect.World *= Matrix.CreateRotationY(MathHelper.ToRadians(1f));
+            effect.World *= Matrix.CreateRotationX(MathHelper.ToRadians(2f));
+            effect.World *= Matrix.CreateRotationZ(MathHelper.ToRadians(0.5f));
+            */
 
             //RasterizerState state = new RasterizerState();
             //GraphicsDevice.RasterizerState = state;
 
             //drawColorVertices();
-
-            drawTexturedVertices();
+            //drawTexturedVertices();
+            drawNormalVertices();
 
             base.Draw(gameTime);
         }
@@ -191,6 +243,16 @@ namespace _1W
             {
                 pass.Apply();
                 GraphicsDevice.DrawUserPrimitives<VertexPositionTexture>(PrimitiveType.TriangleList, textureVertices, 0, textureVertices.Length / 3);
+            }
+        }
+
+        private void drawNormalVertices()
+        {
+
+            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                GraphicsDevice.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleList, normalVertices, 0, normalVertices.Length / 3);
             }
         }
 
