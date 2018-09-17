@@ -79,25 +79,22 @@ namespace _1W
 
             //BL- BOTTOM LEFT
             textureVertices[0] = new VertexPositionTexture(new Vector3(-1, -1, 0), new Vector2(0, 1));
-
             //TL- TOP LEFT
             textureVertices[1] = new VertexPositionTexture(new Vector3(-1, 1, 0), new Vector2(0, 0));
-
             //BR- BOTTOM RIGHT
             textureVertices[2] = new VertexPositionTexture(new Vector3(1, -1, 0), new Vector2(1, 1));
 
             //TR
-            textureVertices[3] = new VertexPositionTexture(new Vector3(1, 1, 0), new Vector2(1, 0));
-            
+            textureVertices[3] = new VertexPositionTexture(new Vector3(1, 1, 0), new Vector2(1, 0));         
             //BR
             textureVertices[4] = new VertexPositionTexture(new Vector3(1, -1, 0), new Vector2(1, 1));
-
             //TL
             textureVertices[5] = new VertexPositionTexture(new Vector3(-1, 1, 0), new Vector2(0, 0));
 
             effect = new BasicEffect(GraphicsDevice);
             effect.TextureEnabled = true;
             effect.Texture = Content.Load<Texture2D>("uv_texture");
+            //effect.EnableDefaultLighting();
         }
 
         void setUpColorVertices()
@@ -117,10 +114,10 @@ namespace _1W
             colorVertices[3] = new VertexPositionColor(new Vector3(1, 1, 0), Color.Black);
 
 
-            colorVertices[4] = new VertexPositionColor(new Vector3(-1, 1, 0), Color.Yellow);
+            colorVertices[4] = new VertexPositionColor(new Vector3(1, -1, 0), Color.Yellow);
 
 
-            colorVertices[5] = new VertexPositionColor(new Vector3(1, -1, 0), Color.Purple);
+            colorVertices[5] = new VertexPositionColor(new Vector3(-1, 1, 0), Color.Purple);
 
             effect = new BasicEffect(GraphicsDevice);
             effect.VertexColorEnabled = true;
