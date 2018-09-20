@@ -26,6 +26,11 @@ namespace _1W
         //Normal Vertices
         VertexPositionNormalTexture[] normalVertices;
 
+        //Indexed
+        short[] indices;
+        VertexBuffer vbuffer;
+        IndexBuffer ibuffer;
+
         //Effect (World)
         BasicEffect effect;
 
@@ -74,7 +79,9 @@ namespace _1W
             */
             //setUpColorVertices();
             //setUpTexturedVertices();
-            setUpNormalVertices();
+            //setUpNormalVertices();
+            //setUpIndexedColorVertices();
+            setUpPyramid();
         }
 
         void setUpNormalVertices()
@@ -161,6 +168,93 @@ namespace _1W
             effect.TextureEnabled = false;
         }
 
+        void setUpIndexedColorVertices()
+        {
+            colorVertices = new VertexPositionColor[4];
+
+            //BL- BOTTOM LEFT
+            colorVertices[0] = new VertexPositionColor(new Vector3(-1, -1, 0), Color.Red);
+
+            //TL- TOP LEFT
+            colorVertices[1] = new VertexPositionColor(new Vector3(-1, 1, 0), Color.Green);
+
+            //BR- BOTTOM RIGHT
+            colorVertices[2] = new VertexPositionColor(new Vector3(1, -1, 0), Color.Blue);
+
+            //TR
+            colorVertices[3] = new VertexPositionColor(new Vector3(1, 1, 0), Color.Black);
+
+            indices = new short[6];
+
+            //Triangle One
+            indices[0] = 0;
+            indices[1] = 1;
+            indices[2] = 2;
+
+            //Triangle Two
+            indices[3] = 2;
+            indices[4] = 1;
+            indices[5] = 3;
+
+
+            vbuffer = new VertexBuffer(GraphicsDevice, VertexPositionColor.VertexDeclaration, colorVertices.Length, BufferUsage.WriteOnly);
+            vbuffer.SetData<VertexPositionColor>(colorVertices);
+
+            ibuffer = new IndexBuffer(GraphicsDevice, IndexElementSize.SixteenBits, indices.Length, BufferUsage.WriteOnly);
+            ibuffer.SetData<short>(indices);
+
+
+            effect = new BasicEffect(GraphicsDevice);
+            effect.VertexColorEnabled = true;
+            effect.TextureEnabled = false;
+        }
+
+
+        void setUpPyramid()
+        {
+            colorVertices = new VertexPositionColor[4];
+
+            //Centre
+            colorVertices[0] = new VertexPositionColor(new Vector3(0, 0, 0), Color.Red);
+
+            //Top
+            colorVertices[1] = new VertexPositionColor(new Vector3(0, 1, 0), Color.Green);
+
+            //BR- BOTTOM RIGHT
+            colorVertices[2] = new VertexPositionColor(new Vector3(1, -1, 0), Color.Blue);
+
+            //BL
+            colorVertices[3] = new VertexPositionColor(new Vector3(-1, -1, 0), Color.Black);
+
+            indices = new short[9];
+
+            //Triangle One
+            indices[0] = 0;
+            indices[1] = 1;
+            indices[2] = 2;
+
+            //Triangle Two
+            indices[3] = 0;
+            indices[4] = 2;
+            indices[5] = 3;
+
+            //Triangle Three
+            indices[6] = 0;
+            indices[7] = 3;
+            indices[8] = 1;
+
+
+            vbuffer = new VertexBuffer(GraphicsDevice, VertexPositionColor.VertexDeclaration, colorVertices.Length, BufferUsage.WriteOnly);
+            vbuffer.SetData<VertexPositionColor>(colorVertices);
+
+            ibuffer = new IndexBuffer(GraphicsDevice, IndexElementSize.SixteenBits, indices.Length, BufferUsage.WriteOnly);
+            ibuffer.SetData<short>(indices);
+
+            effect = new BasicEffect(GraphicsDevice);
+            effect.VertexColorEnabled = true;
+            effect.TextureEnabled = false;
+        }
+
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
         /// game-specific content.
@@ -221,7 +315,9 @@ namespace _1W
 
             //drawColorVertices();
             //drawTexturedVertices();
-            drawNormalVertices();
+            //drawNormalVertices();
+            //drawIndexedColorVertices();
+            drawPyramid();
 
             base.Draw(gameTime);
         }
@@ -256,5 +352,31 @@ namespace _1W
             }
         }
 
+        private void drawIndexedColorVertices()
+        {
+            GraphicsDevice.SetVertexBuffer(vbuffer);
+            GraphicsDevice.Indices = ibuffer;
+
+            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionColor>(
+                    PrimitiveType.TriangleList, colorVertices, 0, colorVertices.Length,
+                    indices, 0, indices.Length / 3);
+            }
+        }
+        private void drawPyramid()
+        {
+            GraphicsDevice.SetVertexBuffer(vbuffer);
+            GraphicsDevice.Indices = ibuffer;
+
+            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionColor>(
+                    PrimitiveType.TriangleList, colorVertices, 0, colorVertices.Length,
+                    indices, 0, indices.Length / 3);
+            }
+        }
     }
 }
