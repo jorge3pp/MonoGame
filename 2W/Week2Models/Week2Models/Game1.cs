@@ -12,6 +12,7 @@ namespace Week2Models
         GraphicsDeviceManager graphics;
 
         BasicModel earthModel;
+        BasicModel shipModel;
 
         Matrix view;
         Matrix projection;
@@ -49,7 +50,7 @@ namespace Week2Models
         void UpdateView()
         {
             view = Matrix.CreateLookAt(
-                new Vector3(0, 0, 75),
+                new Vector3(0, 0, 50),
                 new Vector3(0, 0, -1),
                 Vector3.Up);
             
@@ -58,8 +59,10 @@ namespace Week2Models
 
         protected override void LoadContent()
         {
-            earthModel = new BasicModel("earth", Vector3.Zero, Vector3.Zero, Vector3.One);
+            shipModel = new BasicModel("ship", new Vector3(40, 0, 0), Vector3.Zero, new Vector3(0.4f, 0.4f, 0.4f));
+            earthModel = new BasicModel("earth", Vector3.Zero, Vector3.Zero, new Vector3(0.6f, 0.6f, 0.6f));
             earthModel.LoadContent(Content);
+            shipModel.LoadContent(Content);
         }
         
 
@@ -74,8 +77,10 @@ namespace Week2Models
                 Exit();
 
             UpdateView();
-            earthModel.world *= Matrix.CreateRotationZ(MathHelper.ToRadians(0.2f));
-            earthModel.world *= Matrix.CreateRotationY(MathHelper.ToRadians(0.5f));
+            shipModel.world *= Matrix.CreateRotationZ(MathHelper.ToRadians(0.2f));
+            shipModel.world *= Matrix.CreateRotationY(MathHelper.ToRadians(1f));
+
+            earthModel.world *= Matrix.CreateRotationY(MathHelper.ToRadians(-0.2f));
 
             base.Update(gameTime);
         }
@@ -85,6 +90,7 @@ namespace Week2Models
             GraphicsDevice.Clear(Color.DarkBlue);
 
             earthModel.Draw(view, projection);
+            shipModel.Draw(view, projection);
 
             base.Draw(gameTime);
         }
