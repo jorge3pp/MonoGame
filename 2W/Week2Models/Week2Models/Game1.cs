@@ -11,22 +11,11 @@ namespace Week2Models
     {
         GraphicsDeviceManager graphics;
 
-        Model model;
-
-        Matrix world;
-        Matrix[] bonesTransforms;
+        BasicModel earthModel;
 
         Matrix view;
         Matrix projection;
-
-
-        //Indexed
-        short[] indices;
-        VertexBuffer vbuffer;
-        IndexBuffer ibuffer;
-
-        //Effect (World)
-        BasicEffect effect;
+        
 
         public Game1()
         {
@@ -69,14 +58,8 @@ namespace Week2Models
 
         protected override void LoadContent()
         {
-            //Load Model with the CP
-            model = Content.Load<Model>("Models\\earth");
-
-            //Copy bone transforms
-            bonesTransforms = new Matrix[model.Bones.Count];
-            model.CopyAbsoluteBoneTransformsTo(bonesTransforms);
-
-            world = Matrix.Identity;
+            earthModel = new BasicModel("earth", Vector3.Zero, Vector3.Zero, Vector3.One);
+            earthModel.LoadContent(Content);
         }
         
 
@@ -89,29 +72,19 @@ namespace Week2Models
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            
+
+            UpdateView();
+            earthModel.world *= Matrix.CreateRotationZ(MathHelper.ToRadians(0.2f));
+            earthModel.world *= Matrix.CreateRotationY(MathHelper.ToRadians(0.5f));
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.DarkBlue);
 
-            foreach(ModelMesh mesh in model.Meshes)
-            {
-                foreach(BasicEffect effect in mesh.Effects)
-                {
-                    effect.View = view;
-                    effect.Projection = projection;
-
-                    effect.World = bonesTransforms[mesh.ParentBone.Index] * world;
-
-                    //effect.PreferPerPixelLighting = true;
-                    //effect.EnableDefaultLighting();
-                }
-                mesh.Draw();
-            }
+            earthModel.Draw(view, projection);
 
             base.Draw(gameTime);
         }
