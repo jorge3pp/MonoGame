@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour {
 		countText.text = "Counts: " + count.ToString ();
 
         // Check if our 'count' is equal to or exceeded 12
-        if (count >= 16)
+        if (count >= 28)
         {
             // Set the text value of our 'winText'
             winText.text = "You Win!";
